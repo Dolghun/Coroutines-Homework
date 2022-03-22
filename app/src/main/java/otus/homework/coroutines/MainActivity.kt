@@ -1,7 +1,8 @@
 package otus.homework.coroutines
 
-import androidx.appcompat.app.AppCompatActivity
+import android.annotation.SuppressLint
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -9,22 +10,23 @@ class MainActivity : AppCompatActivity() {
 
     private val diContainer = DiContainer()
 
+    @SuppressLint("InflateParams")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val view = layoutInflater.inflate(R.layout.activity_main, null) as CatsView
+        val view = layoutInflater.inflate(R.layout.fragment_cat, null) as CatsView
         setContentView(view)
 
         catsPresenter = CatsPresenter(diContainer.service)
         view.presenter = catsPresenter
         catsPresenter.attachView(view)
-        catsPresenter.onInitComplete()
     }
 
     override fun onStop() {
         if (isFinishing) {
             catsPresenter.detachView()
         }
+        catsPresenter.onStopCoroutine()
         super.onStop()
     }
 }
